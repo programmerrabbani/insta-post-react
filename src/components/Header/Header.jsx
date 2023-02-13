@@ -11,34 +11,39 @@ import { Link } from "react-router-dom";
 import swal from "sweetalert";
 import axios from "axios";
 
-const Header = () => {
+const Header = ({ setPosts }) => {
   const [modal, setModal] = useState({
     status: false,
   });
   const [input, setInput] = useState({
     aName: "",
-    aPhoto: "",
     pContent: "",
     pPhoto: "",
   });
 
+  // const [images, setImages] = useState([]);
+
   const handleInputChange = (e) => {
-    setInput({
-      ...input,
+    const file = e.target.files;
+    const fileURL = URL.createObjectURL(file);
+    console.log(fileURL);
+    setInput((prevState) => ({
+      ...prevState,
       [e.target.name]: e.target.value,
-    });
+      pPhoto: [],
+    }));
   };
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
 
-    if (!input.aName || !input.aPhoto || !input.pContent || !input.pPhoto) {
+    if (!input.aName || !input.pContent || !input.pPhoto) {
       swal("All Fields Are Required");
     } else {
       axios.post("http://localhost:5050/posts", input).then((res) => {
+        setPosts((prevState) => [...prevState, res.data]);
         setInput({
           aName: "",
-          aPhoto: "",
           pContent: "",
           pPhoto: "",
         });
@@ -166,16 +171,6 @@ const Header = () => {
                               />
                             </div>
                             <div className="my-3">
-                              <label for="">Aught Photo</label>
-                              <input
-                                type="text"
-                                name="aPhoto"
-                                value={input.aPhoto}
-                                onChange={handleInputChange}
-                                className="form-control"
-                              />
-                            </div>
-                            <div className="my-3">
                               <label for="">Post Content</label>
                               <textarea
                                 name="pContent"
@@ -185,12 +180,27 @@ const Header = () => {
                               ></textarea>
                             </div>
                             <div className="my-3">
-                              <label for="">Post Photo</label>
+                              <label for="">Post Photo</label> <br />
+                              <label for="upload-pPhoto">
+                                <img
+                                  style={{
+                                    width: "60px",
+                                    height: "60px",
+                                    objectFit: "cover",
+                                    cursor: "pointer",
+                                  }}
+                                  src="https://freeiconshop.com/wp-content/uploads/edd/image-outline-filled.png"
+                                  alt=""
+                                />
+                              </label>
                               <input
                                 name="pPhoto"
                                 value={input.pPhoto}
                                 onChange={handleInputChange}
-                                type="text"
+                                type="file"
+                                style={{ display: "none" }}
+                                multiple
+                                id="upload-pPhoto"
                                 className="form-control"
                               />
                             </div>

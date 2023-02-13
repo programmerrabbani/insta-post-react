@@ -45,7 +45,7 @@ const Home = () => {
 
   return (
     <>
-      <Header />
+      <Header setPosts={setPosts} />
       <div className="body_content py-5">
         <div className="container">
           <div className="row justify-content-center">
@@ -83,24 +83,27 @@ const Home = () => {
               </div>
 
               {posts.map((item, index) => (
-                <div className="timeLine my-5">
+                <div className="timeLine my-5" key={index}>
                   <div className="card">
                     <div className="card-body">
-                      <div className="post" key={index}>
+                      <div className="post">
                         <div className="post_aught">
                           <div className="user_info">
                             <a href="#">
-                              <img src={item.aPhoto} alt="" />
+                              <img
+                                src="https://powerpackelements.com/wp-content/uploads/2017/11/Team-memeber-01.png"
+                                alt=""
+                              />
                             </a>
                             <div className="user_details">
                               <span>{item.aName}</span>
                             </div>
                           </div>
-                          <div class="dropdown my-3">
-                            <button class="dropbtn">
+                          <div className="dropdown my-3">
+                            <button className="dropbtn">
                               <BsThreeDots />
                             </button>
-                            <div class="dropdown-content">
+                            <div className="dropdown-content">
                               <Link to="#">Edit</Link>
                               <Link onClick={() => handelPostDelete(item.id)}>
                                 Delete
